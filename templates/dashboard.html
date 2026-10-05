@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Performance Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 240px;
+            background: #1f2937;
+            color: white;
+            padding: 25px 15px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .menu-title {
+            font-size: 12px;
+            color: #9ca3af;
+            margin: 20px 10px 10px;
+            text-transform: uppercase;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 12px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+        }
+
+        .sidebar a:hover {
+            background: #374151;
+            color: white;
+        }
+
+        .logout {
+            margin-top: 25px;
+            background: #dc2626;
+            color: white !important;
+            text-align: center;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+        }
+
+        /* TOPBAR */
+
+        .topbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .topbar h2 {
+            font-size: 22px;
+        }
+
+        .user-info {
+            font-size: 14px;
+        }
+
+        .role {
+            background: #e5e7eb;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 30px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #6b7280;
+        }
+
+        /* CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .card-value {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        /* SECTIONS */
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+        }
+
+        /* QUICK ACTIONS */
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .button.green {
+            background: #16a34a;
+        }
+
+        .button.orange {
+            background: #ea580c;
+        }
+
+        .button.gray {
+            background: #4b5563;
+        }
+
+        /* CSV */
+
+        .csv-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .csv-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .csv-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .csv-card p {
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            padding: 11px 18px;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+                width: calc(100% - 190px);
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .csv-box {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            Student Performance
+        </div>
+
+        <div class="menu-title">
+            Main
+        </div>
+
+        <a href="/dashboard">
+            Dashboard
+        </a>
+
+        <a href="/students">
+            Students
+        </a>
+
+        <a href="/courses">
+            Courses
+        </a>
+
+        <a href="/grades">
+            Grades
+        </a>
+
+        <a href="/analytics">
+            Analytics
+        </a>
+
+        <div class="menu-title">
+            Reports
+        </div>
+
+        <a href="/dashboard#csv">
+            CSV Reports
+        </a>
+
+        <a href="/logout" class="logout">
+            Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <h2>
+                Dashboard
+            </h2>
+
+            <div class="user-info">
+
+                Welcome,
+                <strong>{{ user_name }}</strong>
+
+                <span class="role">
+                    Admin
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <section class="content">
+
+            <!-- WELCOME -->
+
+            <div class="welcome">
+
+                <h1>
+                    Student Performance Dashboard
+                </h1>
+
+                <p>
+                    Manage students, courses, grades and academic reports.
+                </p>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="card-title">
+                        Total Students
+                    </div>
+
+                    <div class="card-value">
+                        {{ total_students }}
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        Total Courses
+                    </div>
+
+                    <div class="card-value">
+                        {{ total_courses }}
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        Total Grades
+                    </div>
+
+                    <div class="card-value">
+                        {{ total_grades }}
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        Average Score
+                    </div>
+
+                    <div class="card-value">
+                        {{ average_score }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="section">
+
+                <h2>
+                    Quick Actions
+                </h2>
+
+                <div class="actions">
+
+                    <a
+                        href="/students/new"
+                        class="button"
+                    >
+                        + Add Student
+                    </a>
+
+                    <a
+                        href="/courses/new"
+                        class="button green"
+                    >
+                        + Add Course
+                    </a>
+
+                    <a
+                        href="/grades/new"
+                        class="button orange"
+                    >
+                        + Add Grade
+                    </a>
+
+                    <a
+                        href="/analytics"
+                        class="button gray"
+                    >
+                        View Analytics
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- CSV SECTION -->
+
+            <div
+                class="section"
+                id="csv"
+            >
+
+                <h2>
+                    CSV Reports
+                </h2>
+
+                <div class="csv-box">
+
+                    <!-- UPLOAD -->
+
+                    <div class="csv-card">
+
+                        <h3>
+                            Upload Grades CSV
+                        </h3>
+
+                        <p>
+                            Upload a CSV file to add grades to the database.
+                        </p>
+
+                        <form
+                            method="POST"
+                            action="/grades/upload"
+                            enctype="multipart/form-data"
+                        >
+
+                            <input
+                                type="file"
+                                name="file"
+                                accept=".csv"
+                                required
+                            >
+
+                            <br>
+
+                            <button type="submit">
+                                Upload CSV
+                            </button>
+
+                        </form>
+
+                    </div>
+
+
+                    <!-- EXPORT -->
+
+                    <div class="csv-card">
+
+                        <h3>
+                            Export Reports
+                        </h3>
+
+                        <p>
+                            Download your grade data as CSV or Excel.
+                        </p>
+
+                        <div class="actions">
+
+                            <a
+                                href="/grades/export/csv"
+                                class="button"
+                            >
+                                Export CSV
+                            </a>
+
+                            <a
+                                href="/api/grades/export/excel"
+                                class="button green"
+                            >
+                                Export Excel
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFORMATION -->
+
+            <div class="section">
+
+                <h2>
+                    System Overview
+                </h2>
+
+                <p>
+                    This system allows administrators to manage
+                    student information, courses and grades.
+                    Analytics are generated using Pandas and NumPy.
+                    Grade reports can be uploaded using CSV files
+                    and exported as CSV or Excel files.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

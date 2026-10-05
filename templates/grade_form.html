@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Grade</title>
+</head>
+
+<body>
+
+    <h1>Add Grade</h1>
+
+    <hr>
+
+    <form action="{{ url_for('create_grade') }}" method="POST">
+
+        <label>Student:</label>
+
+        <select name="student_id" required>
+
+            <option value="">
+                Select Student
+            </option>
+
+            {% for student in students %}
+
+            <option value="{{ student.id }}">
+                {{ student.name }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+
+        <label>Course:</label>
+
+        <select name="course_id" required>
+
+            <option value="">
+                Select Course
+            </option>
+
+            {% for course in courses %}
+
+            <option value="{{ course.id }}">
+                {{ course.name }} ({{ course.code }})
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+
+        <label>Score:</label>
+
+        <input
+            type="number"
+            name="score"
+            min="0"
+            max="100"
+            step="0.01"
+            required
+        >
+
+        <br><br>
+
+
+        <label>Date:</label>
+
+        <input
+            type="date"
+            name="date"
+            required
+        >
+
+        <br><br>
+
+
+        <button type="submit">
+            Add Grade
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="{{ url_for('grades') }}">
+        Back to Grades
+    </a>
+
+</body>
+
+</html>

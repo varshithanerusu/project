@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Students</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-form input {
+            width: 280px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button,
+        .button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .search-button {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .clear-button {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .add-button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .view-button {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .edit-button {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        button:hover,
+        .button:hover {
+            opacity: 0.85;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .no-students {
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            color: #777;
+        }
+
+        .search-result {
+            margin-bottom: 15px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Management</h1>
+
+        <!-- Search and Add Student -->
+        <div class="top-section">
+
+            <!-- Search Form -->
+            <form method="GET" action="/students" class="search-form">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search by name or email"
+                    value="{{ search }}"
+                >
+
+                <button type="submit" class="search-button">
+                    Search
+                </button>
+
+                <a href="/students" class="button clear-button">
+                    Clear
+                </a>
+
+            </form>
+
+            <!-- Add Student -->
+            <a href="/students/new" class="button add-button">
+                + Add Student
+            </a>
+
+        </div>
+
+
+        <!-- Search Result Message -->
+        {% if search %}
+
+            <div class="search-result">
+                Search results for:
+                <strong>{{ search }}</strong>
+            </div>
+
+        {% endif %}
+
+
+        <!-- Student Table -->
+
+        {% if students %}
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for student in students %}
+
+                        <tr>
+
+                            <td>
+                                {{ student.id }}
+                            </td>
+
+                            <td>
+                                {{ student.name }}
+                            </td>
+
+                            <td>
+                                {{ student.email }}
+                            </td>
+
+                            <td>
+
+                                <div class="actions">
+
+                                    <!-- View -->
+                                    <a
+                                        href="/students/{{ student.id }}"
+                                        class="button view-button"
+                                    >
+                                        View
+                                    </a>
+
+
+                                    <!-- Edit -->
+                                    <a
+                                        href="/students/{{ student.id }}/edit"
+                                        class="button edit-button"
+                                    >
+                                        Edit
+                                    </a>
+
+
+                                    <!-- Delete -->
+                                    <form
+                                        method="POST"
+                                        action="/students/{{ student.id }}"
+                                        onsubmit="return confirm('Are you sure you want to delete this student?');"
+                                    >
+
+                                        <input
+                                            type="hidden"
+                                            name="_method"
+                                            value="DELETE"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="delete-button"
+                                        >
+                                            Delete
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <div class="no-students">
+
+                {% if search %}
+
+                    <p>
+                        No students found for
+                        <strong>{{ search }}</strong>.
+                    </p>
+
+                {% else %}
+
+                    <p>
+                        No students available.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

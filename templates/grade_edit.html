@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Grade</title>
+</head>
+
+<body>
+
+    <h1>Edit Grade</h1>
+
+    <hr>
+
+    <form
+        action="{{ url_for('update_grade', id=grade.id) }}"
+        method="POST"
+    >
+
+        <label>Student:</label>
+
+        <select name="student_id" required>
+
+            {% for student in students %}
+
+            <option
+                value="{{ student.id }}"
+                {% if student.id == grade.student_id %}
+                selected
+                {% endif %}
+            >
+
+                {{ student.name }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+
+        <label>Course:</label>
+
+        <select name="course_id" required>
+
+            {% for course in courses %}
+
+            <option
+                value="{{ course.id }}"
+                {% if course.id == grade.course_id %}
+                selected
+                {% endif %}
+            >
+
+                {{ course.name }} ({{ course.code }})
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+
+        <label>Score:</label>
+
+        <input
+            type="number"
+            name="score"
+            min="0"
+            max="100"
+            step="0.01"
+            value="{{ grade.score }}"
+            required
+        >
+
+        <br><br>
+
+
+        <label>Date:</label>
+
+        <input
+            type="date"
+            name="date"
+            value="{{ grade.date }}"
+            required
+        >
+
+        <br><br>
+
+
+        <button type="submit">
+            Update Grade
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="{{ url_for('grades') }}">
+        Back to Grades
+    </a>
+
+</body>
+
+</html>

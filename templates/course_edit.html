@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Course</title>
+</head>
+
+<body>
+
+    <h1>Edit Course</h1>
+
+    <hr>
+
+    <form
+        action="{{ url_for('update_course', id=course.id) }}"
+        method="POST"
+    >
+
+        <label>Course Name:</label>
+
+        <input
+            type="text"
+            name="name"
+            value="{{ course.name }}"
+            required
+        >
+
+        <br><br>
+
+        <label>Course Code:</label>
+
+        <input
+            type="text"
+            name="code"
+            value="{{ course.code }}"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Update Course
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="{{ url_for('courses') }}">
+        Back to Courses
+    </a>
+
+</body>
+
+</html>

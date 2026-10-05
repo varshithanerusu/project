@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Grade Details</title>
+</head>
+
+<body>
+
+    <h1>Grade Details</h1>
+
+    <hr>
+
+    <p>
+        <strong>Grade ID:</strong>
+        {{ grade.id }}
+    </p>
+
+    <p>
+        <strong>Student:</strong>
+        {{ grade.student.name }}
+    </p>
+
+    <p>
+        <strong>Student Email:</strong>
+        {{ grade.student.email }}
+    </p>
+
+    <p>
+        <strong>Course:</strong>
+        {{ grade.course.name }}
+    </p>
+
+    <p>
+        <strong>Course Code:</strong>
+        {{ grade.course.code }}
+    </p>
+
+    <p>
+        <strong>Score:</strong>
+        {{ grade.score }}
+    </p>
+
+    <p>
+        <strong>Date:</strong>
+        {{ grade.date }}
+    </p>
+
+    <br>
+
+    <a href="{{ url_for('edit_grade', id=grade.id) }}">
+        Edit Grade
+    </a>
+
+    <br><br>
+
+    <a href="{{ url_for('grades') }}">
+        Back to Grades
+    </a>
+
+</body>
+
+</html>
